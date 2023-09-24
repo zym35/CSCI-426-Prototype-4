@@ -15,17 +15,21 @@ public class PlayerController : MonoBehaviour
 
     public ControlScheme controlScheme;
     public float moveSpeed;
-    public float gemSpeedSlowMultiplier;
+    public float gemSpeedSlow, gemBlowSizeup, gemBlowPowerup;
     public float stackSpacing;
     public Transform stackBegin;
-    public float autoActionTime;
+    public float autoActionTime, blowTime;
+    public Transform blowObject;
+    public float blowStartSize, blowMaxSize;
+    public float blowStartPower;
     public int score;
     public ChargeCanvasBehavior chargeCanvasBehavior;
+    public BlowTrigger blowTrigger;
 
     private Rigidbody _rb;
     private List<Transform> _gemInRange;
     private Stack<Transform> _gemStacked;
-    private float _dropoffTimer, _pickupTimer;
+    private float _dropoffTimer, _pickupTimer, _chargeTimer;
     private bool _inDropoffArea;
 
     private void Awake()
@@ -38,15 +42,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleInput();
-
-        if (_gemInRange.Count > 0)
-        {
-            OnGemInRange();
-        }
-
+        
         if (_inDropoffArea)
         {
             DoDropoff();
+        }
+        else if (_gemInRange.Count > 0 && _chargeTimer <= 0)
+        {
+            OnGemInRange();
         }
     }
 
@@ -56,17 +59,23 @@ public class PlayerController : MonoBehaviour
         {
             case ControlScheme.WASDSpace:
                 OnMove(Input.GetAxis("HorizontalWASD"), Input.GetAxis("VerticalWASD"));
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKey(KeyCode.Space))
+                    OnChargeAction();
+                if (Input.GetKeyUp(KeyCode.Space))
                     OnAction();
                 break;
             case ControlScheme.ArrowKeyL:
                 OnMove(Input.GetAxis("HorizontalArrow"), Input.GetAxis("VerticalArrow"));
-                if (Input.GetKeyDown(KeyCode.L))
+                if (Input.GetKey(KeyCode.L))
+                    OnChargeAction();
+                if (Input.GetKeyUp(KeyCode.L))
                     OnAction();
                 break;
             case ControlScheme.Controller:
                 OnMove(Input.GetAxis("HorizontalController"), Input.GetAxis("VerticalController"));
-                if (Input.GetKeyDown(KeyCode.Joystick1Button0))
+                if (Input.GetKey(KeyCode.Joystick1Button0))
+                    OnChargeAction();
+                if (Input.GetKeyUp(KeyCode.Joystick1Button0))
                     OnAction();
                 break;
             default:
@@ -76,15 +85,37 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove(float horizontal, float vertical)
     {
-        _rb.AddForce(Time.deltaTime * moveSpeed * new Vector3(horizontal, 0, vertical));
+        _rb.AddForce((1f - _gemStacked.Count * gemSpeedSlow)
+                     * Time.deltaTime * moveSpeed * new Vector3(horizontal, 0, vertical));
     }
 
     private void OnAction()
     {
-        if (_gemInRange.Count == 0)
-            return;
-
+        if (_chargeTimer >= blowTime)
+        {
+            var force = blowStartPower + _gemStacked.Count * gemBlowPowerup;
+            
+            foreach (var rb in blowTrigger.rigidbodyInRange)
+            {
+                var dir = Vector3.Normalize(rb.transform.position - transform.position);
+                rb.AddForce(force * dir, ForceMode.Impulse);    
+            }
+        }
         
+        chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Blow);
+        _chargeTimer = 0;
+        blowObject.localScale = blowStartSize * Vector3.one;
+        
+    }
+
+    private void OnChargeAction()
+    {
+        _chargeTimer += Time.deltaTime;
+        var percent = Mathf.Clamp01(_chargeTimer / blowTime);
+        chargeCanvasBehavior.Fill(percent, ChargeCanvasBehavior.FillType.Blow);
+
+        blowObject.localScale = 
+            Mathf.Lerp(blowStartSize, blowMaxSize + gemBlowSizeup * _gemStacked.Count, percent) * Vector3.one;
     }
 
     private void DoDropoff()
@@ -128,6 +159,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Gem"))
         {
+            if (other.transform.parent != null)
+                return;
             var g = other.transform;
             if (!_gemInRange.Contains(g) && !_gemStacked.Contains(g)) 
                 _gemInRange.Add(g);
