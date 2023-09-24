@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,13 +18,15 @@ public class PlayerController : MonoBehaviour
     public float gemSpeedSlowMultiplier;
     public float stackSpacing;
     public Transform stackBegin;
-    public float dropoffTime;
+    public float autoActionTime;
     public int score;
+    public ChargeCanvasBehavior chargeCanvasBehavior;
 
     private Rigidbody _rb;
     private List<Transform> _gemInRange;
     private Stack<Transform> _gemStacked;
-    private float _dropoffTimer;
+    private float _dropoffTimer, _pickupTimer;
+    private bool _inDropoffArea;
 
     private void Awake()
     {
@@ -35,6 +38,16 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleInput();
+
+        if (_gemInRange.Count > 0)
+        {
+            OnGemInRange();
+        }
+
+        if (_inDropoffArea)
+        {
+            DoDropoff();
+        }
     }
 
     private void HandleInput()
@@ -71,14 +84,44 @@ public class PlayerController : MonoBehaviour
         if (_gemInRange.Count == 0)
             return;
 
-        var g = _gemInRange[0];
         
-        g.SetParent(stackBegin);
-        g.localPosition = Vector3.zero;
-        g.Translate(stackSpacing * _gemStacked.Count * Vector3.up);
-        g.GetComponent<Rigidbody>().isKinematic = true;
-        _gemStacked.Push(g);
-        _gemInRange.Remove(g);
+    }
+
+    private void DoDropoff()
+    {
+        if (_gemStacked.Count == 0)
+            return;
+            
+        _dropoffTimer += Time.deltaTime;
+        chargeCanvasBehavior.Fill(_dropoffTimer / autoActionTime, ChargeCanvasBehavior.FillType.Dropoff);
+        if (_dropoffTimer > autoActionTime)
+        {
+            // TODO: animation and effects
+            _dropoffTimer = 0;
+            chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
+            Destroy(_gemStacked.Pop().gameObject);
+            score++;
+        }
+    }
+
+    private void OnGemInRange()
+    {
+        _pickupTimer += Time.deltaTime;
+        chargeCanvasBehavior.Fill(_pickupTimer / autoActionTime, ChargeCanvasBehavior.FillType.Pickup);
+        if (_pickupTimer > autoActionTime)
+        {
+            _pickupTimer = 0;
+            chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Pickup);
+            var g = _gemInRange[0];
+        
+            g.SetParent(stackBegin);
+            g.localPosition = Vector3.zero;
+            g.Translate(stackSpacing * _gemStacked.Count * Vector3.up);
+        
+            g.GetComponent<Rigidbody>().isKinematic = true;
+            _gemStacked.Push(g);
+            _gemInRange.Remove(g);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -89,23 +132,10 @@ public class PlayerController : MonoBehaviour
             if (!_gemInRange.Contains(g) && !_gemStacked.Contains(g)) 
                 _gemInRange.Add(g);
         }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
+        
         if (other.CompareTag("Dropoff"))
         {
-            if (_gemStacked.Count == 0)
-                return;
-            
-            _dropoffTimer += Time.deltaTime;
-            if (_dropoffTimer > dropoffTime)
-            {
-                // TODO: animation and effects
-                _dropoffTimer = 0;
-                Destroy(_gemStacked.Pop().gameObject);
-                score++;
-            }
+            _inDropoffArea = true;
         }
     }
 
@@ -116,6 +146,17 @@ public class PlayerController : MonoBehaviour
             var g = other.transform;
             if (_gemInRange.Contains(g) && !_gemStacked.Contains(g)) 
                 _gemInRange.Remove(g);
+
+            if (_gemInRange.Count == 0)
+            {
+                chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
+            }
+        }
+        
+        if (other.CompareTag("Dropoff"))
+        {
+            _inDropoffArea = false;
+            chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
         }
     }
 }
