@@ -118,7 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda56b756e6c2d5459470cf81cf5656a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbodyInRange: []
+  gemInRange: []
+  playerInRange: []
 --- !u!1 &3249422185729030024
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,10 +299,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlScheme: 2
-  moveSpeed: 400
+  moveSpeed: 500
   gemSpeedSlow: 0.11
   gemBlowSizeup: 0.6
   gemBlowPowerup: 0.5
+  gemBlowOffProbabilityUp: 0.15
   stackSpacing: 0.5
   stackBegin: {fileID: 233524153310306964}
   autoActionTime: 1
@@ -442,7 +444,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6764767068936603929}
-  m_LocalRotation: {x: 0.012972927, y: 0.9509559, z: 0.30642074, w: -0.040260594}
+  m_LocalRotation: {x: 0.053003788, y: 0.9169639, z: 0.37339726, w: -0.13016313}
   m_LocalPosition: {x: 0, y: 0, z: -0.219}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1

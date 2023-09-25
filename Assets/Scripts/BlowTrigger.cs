@@ -5,21 +5,32 @@ using UnityEngine;
 
 public class BlowTrigger : MonoBehaviour
 {
-    public List<Rigidbody> rigidbodyInRange;
+    public List<Rigidbody> gemInRange;
+    public List<PlayerController> playerInRange;
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Gem"))
+        if (other.CompareTag("Gem"))
         {
-            rigidbodyInRange.Add(other.attachedRigidbody);
+            gemInRange.Add(other.attachedRigidbody);
+        }
+        
+        if (other.CompareTag("Player"))
+        {
+            playerInRange.Add(other.GetComponent<PlayerController>());
         }
     }
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Gem"))
+        if (other.CompareTag("Gem"))
         {
-            rigidbodyInRange.Remove(other.attachedRigidbody);
+            gemInRange.Remove(other.attachedRigidbody);
+        }
+        
+        if (other.CompareTag("Player"))
+        {
+            playerInRange.Remove(other.GetComponent<PlayerController>());
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public ControlScheme controlScheme;
     public float moveSpeed;
-    public float gemSpeedSlow, gemBlowSizeup, gemBlowPowerup;
+    public float gemSpeedSlow, gemBlowSizeup, gemBlowPowerup, gemBlowOffProbabilityUp;
     public float stackSpacing;
     public Transform stackBegin;
     public float autoActionTime, blowTime;
@@ -95,17 +96,41 @@ public class PlayerController : MonoBehaviour
         {
             var force = blowStartPower + _gemStacked.Count * gemBlowPowerup;
             
-            foreach (var rb in blowTrigger.rigidbodyInRange)
+            foreach (var rb in blowTrigger.gemInRange)
             {
                 var dir = Vector3.Normalize(rb.transform.position - transform.position);
-                rb.AddForce(force * dir, ForceMode.Impulse);    
+                rb.AddForce(force * dir, ForceMode.Impulse);
+            }
+
+            foreach (var p in blowTrigger.playerInRange)
+            {
+                if (Random.Range(0f, 1f) < p.GetGemBlowOffProbability())
+                {
+                    var g = p.PopGemStacked();
+                    g.SetParent(null);
+                    var dir = Vector3.Normalize(g.position - transform.position);
+                    var rb = g.GetComponent<Rigidbody>();
+                    rb.isKinematic = false;
+                    rb.AddForce(force * dir, ForceMode.Impulse);
+                }
             }
         }
         
         chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Blow);
         _chargeTimer = 0;
         blowObject.localScale = blowStartSize * Vector3.one;
-        
+    }
+    
+    public Transform PopGemStacked()
+    {
+        return _gemStacked.Pop();
+    }
+
+    public float GetGemBlowOffProbability()
+    {
+        if (_gemStacked.Count == 0)
+            return -1;
+        return _gemStacked.Count * gemBlowOffProbabilityUp + 0.1f;
     }
 
     private void OnChargeAction()
@@ -183,6 +208,7 @@ public class PlayerController : MonoBehaviour
             if (_gemInRange.Count == 0)
             {
                 chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
+                _pickupTimer = 0;
             }
         }
         
@@ -190,6 +216,7 @@ public class PlayerController : MonoBehaviour
         {
             _inDropoffArea = false;
             chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
+            _dropoffTimer = 0;
         }
     }
 }
