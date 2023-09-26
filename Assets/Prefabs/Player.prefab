@@ -302,7 +302,7 @@ MonoBehaviour:
   controlScheme: 2
   moveSpeed: 410
   gemSpeedSlow: 0.15
-  gemBlowSizeup: 0.7
+  gemBlowSizeup: 1.5
   gemBlowPowerup: 0.5
   gemBlowOffProbabilityUp: 0.18
   stackSpacing: 0.75
@@ -316,6 +316,8 @@ MonoBehaviour:
   score: 0
   chargeCanvasBehavior: {fileID: 3967029096164357492}
   blowTrigger: {fileID: 1062474250797580217}
+  scoreText: {fileID: 0}
+  endGame: {fileID: 0}
 --- !u!54 &6409422425221997187
 Rigidbody:
   m_ObjectHideFlags: 0

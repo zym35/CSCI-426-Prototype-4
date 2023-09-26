@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour
     public int score;
     public ChargeCanvasBehavior chargeCanvasBehavior;
     public BlowTrigger blowTrigger;
+    public TMP_Text scoreText;
+    public GameObject endGame;
 
     private Rigidbody _rb;
     private List<Transform> _gemInRange;
@@ -89,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove(float horizontal, float vertical)
     {
-        _rb.AddForce((1f - _gemStacked.Count * gemSpeedSlow)
+        _rb.AddForce(Mathf.Pow(1f - gemSpeedSlow, _gemStacked.Count)
                      * Time.deltaTime * moveSpeed * new Vector3(horizontal, 0, vertical));
     }
 
@@ -159,7 +162,14 @@ public class PlayerController : MonoBehaviour
             _dropoffTimer = 0;
             chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Dropoff);
             Destroy(_gemStacked.Pop().gameObject);
+            
             score++;
+            scoreText.text = score.ToString();
+
+            if (score == 10)
+            {
+                endGame.SetActive(true);
+            }
         }
     }
 
