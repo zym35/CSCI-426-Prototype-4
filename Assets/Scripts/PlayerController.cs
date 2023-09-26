@@ -32,12 +32,17 @@ public class PlayerController : MonoBehaviour
     private Stack<Transform> _gemStacked;
     private float _dropoffTimer, _pickupTimer, _chargeTimer;
     private bool _inDropoffArea;
+    public Transform spawnPoint;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _gemInRange = new List<Transform>();
         _gemStacked = new Stack<Transform>();
+    }
+
+    private void Start() {
+        spawnPoint = gameObject.transform;
     }
 
     private void Update()
