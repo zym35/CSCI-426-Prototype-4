@@ -265,7 +265,7 @@ PrefabInstance:
     - target: {fileID: 7346056324092344655, guid: 1c88c763c832e5449a81f237b5d5aac7,
         type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -704,7 +704,7 @@ PrefabInstance:
     - target: {fileID: 7346056324092344655, guid: 1c88c763c832e5449a81f237b5d5aac7,
         type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -997,7 +997,7 @@ PrefabInstance:
     - target: {fileID: 7346056324092344655, guid: 1c88c763c832e5449a81f237b5d5aac7,
         type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1508,7 +1508,7 @@ PrefabInstance:
     - target: {fileID: 7346056324092344655, guid: 1c88c763c832e5449a81f237b5d5aac7,
         type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1527,6 +1527,7 @@ GameObject:
   - component: {fileID: 678152504}
   - component: {fileID: 678152503}
   - component: {fileID: 678152506}
+  - component: {fileID: 678152507}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1622,6 +1623,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &678152507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678152501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26eb87a3ccec47baaa21eb8a0154568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 2119577421}
+  spawnRadius: 10
+  numberOfGems: 7
 --- !u!1 &698265904
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,6 +1940,7 @@ GameObject:
   - component: {fileID: 859518605}
   - component: {fileID: 859518604}
   - component: {fileID: 859518607}
+  - component: {fileID: 859518608}
   m_Layer: 0
   m_Name: Cylinder (5)
   m_TagString: Untagged
@@ -2019,6 +2036,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &859518608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859518602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26eb87a3ccec47baaa21eb8a0154568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 2119577421}
+  spawnRadius: 7
+  numberOfGems: 5
 --- !u!1001 &898725904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4709,7 +4741,7 @@ PrefabInstance:
     - target: {fileID: 7346056324092344655, guid: 1c88c763c832e5449a81f237b5d5aac7,
         type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4728,6 +4760,7 @@ GameObject:
   - component: {fileID: 2001631000}
   - component: {fileID: 2001630999}
   - component: {fileID: 2001631002}
+  - component: {fileID: 2001631003}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -4823,6 +4856,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2001631003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001630997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26eb87a3ccec47baaa21eb8a0154568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 2119577421}
+  spawnRadius: 7
+  numberOfGems: 5
 --- !u!1001 &2005199773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5313,6 +5361,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed25d7ab85a75b546abeb8a1cf819347, type: 3}
+--- !u!1 &2119577421 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6072751003401117037, guid: 1c88c763c832e5449a81f237b5d5aac7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1901690227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
