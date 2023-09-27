@@ -7,17 +7,11 @@ public class GemSpawner : MonoBehaviour
     public GameObject objectToSpawn; // The prefab of the object you want to spawn
     public float spawnRadius;   // The radius of the spawning area
     public int numberOfGems; // The number of objects to spawn
+    public float waitMin, waitMax;
 
     void Start()
     {
-        
-    }
-
-    void Update()
-    {
-        if (GetNumberOfLiveGems() < numberOfGems) {
-            StartCoroutine(SpawnEverySecond());
-        }
+        StartCoroutine(SpawnEverySecond());
     }
 
     int GetNumberOfLiveGems() {
@@ -50,7 +44,11 @@ public class GemSpawner : MonoBehaviour
     }
 
     IEnumerator SpawnEverySecond() {
-        SpawnGem();
-        yield return new WaitForSeconds(1f);
+        while (GetNumberOfLiveGems() < numberOfGems)
+        {
+            SpawnGem();
+            yield return new WaitForSeconds(Random.Range(waitMin, waitMax));
+        }
+        
     }
 }

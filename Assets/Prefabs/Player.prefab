@@ -300,11 +300,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlScheme: 2
-  moveSpeed: 410
+  moveSpeed: 370
   gemSpeedSlow: 0.15
   gemBlowSizeup: 1.5
   gemBlowPowerup: 0.5
-  gemBlowOffProbabilityUp: 0.18
+  gemBlowOffProbabilityUp: 0.25
+  gemKnockoffDurationUp: 0.5
   stackSpacing: 0.75
   stackBegin: {fileID: 233524153310306964}
   autoActionTime: 1.7
@@ -318,6 +319,8 @@ MonoBehaviour:
   blowTrigger: {fileID: 1062474250797580217}
   scoreText: {fileID: 0}
   endGame: {fileID: 0}
+  knockoff: 0
+  knockoffDuration: 1
 --- !u!54 &6409422425221997187
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -447,7 +450,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6764767068936603929}
-  m_LocalRotation: {x: -0.13069594, y: 0.8692596, z: 0.34180748, w: 0.33237627}
+  m_LocalRotation: {x: -0.17280182, y: 0.82705283, z: 0.36961523, w: 0.38666227}
   m_LocalPosition: {x: 0, y: 0, z: -0.219}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1

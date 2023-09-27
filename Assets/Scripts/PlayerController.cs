@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     public ControlScheme controlScheme;
     public float moveSpeed;
-    public float gemSpeedSlow, gemBlowSizeup, gemBlowPowerup, gemBlowOffProbabilityUp;
+    public float gemSpeedSlow, gemBlowSizeup, gemBlowPowerup, gemBlowOffProbabilityUp, gemKnockoffDurationUp;
     public float stackSpacing;
     public Transform stackBegin;
     public float autoActionTime, blowTime;
@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     public BlowTrigger blowTrigger;
     public TMP_Text scoreText;
     public GameObject endGame;
+    public bool knockoff;
+    public float knockoffDuration;
 
     private Rigidbody _rb;
     private List<Transform> _gemInRange;
@@ -45,7 +47,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleInput();
+        if (!knockoff)
+        {
+            HandleInput();
+        }
 
         if (_chargeTimer <= 0)
         {
@@ -110,11 +115,15 @@ public class PlayerController : MonoBehaviour
 
             foreach (var p in blowTrigger.playerInRange)
             {
+                var dirPlayer = Vector3.Normalize(p.transform.position - transform.position);
+                StartCoroutine(p.DoKnockoff(force * dirPlayer, knockoffDuration + _gemStacked.Count * gemKnockoffDurationUp));
+                
                 if (Random.Range(0f, 1f) < p.GetGemBlowOffProbability())
                 {
                     var g = p.PopGemStacked();
-                    g.SetParent(null);
                     var dir = Vector3.Normalize(g.position - transform.position);
+                    g.SetParent(null);
+
                     var rb = g.GetComponent<Rigidbody>();
                     rb.isKinematic = false;
                     rb.AddForce(force * dir, ForceMode.Impulse);
@@ -125,6 +134,20 @@ public class PlayerController : MonoBehaviour
         chargeCanvasBehavior.Fill(0, ChargeCanvasBehavior.FillType.Blow);
         _chargeTimer = 0;
         blowObject.localScale = blowStartSize * Vector3.one;
+    }
+
+    private IEnumerator DoKnockoff(Vector3 force, float duration)
+    {
+        knockoff = true;
+
+        var constraints = _rb.constraints;
+        _rb.constraints = RigidbodyConstraints.None;
+        _rb.AddForce(force, ForceMode.Impulse);
+        
+        yield return new WaitForSeconds(duration);
+        transform.localRotation = Quaternion.identity;
+        _rb.constraints = constraints;
+        knockoff = false;
     }
     
     public Transform PopGemStacked()
