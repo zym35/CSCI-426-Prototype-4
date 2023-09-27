@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using TorcheyeUtility;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -144,6 +145,8 @@ public class PlayerController : MonoBehaviour
         _rb.constraints = RigidbodyConstraints.None;
         _rb.AddForce(force, ForceMode.Impulse);
         
+        AudioManager.Instance.PlaySoundEffect(AudioManager.SoundEffect.Knockoff);
+        
         yield return new WaitForSeconds(duration);
         transform.localRotation = Quaternion.identity;
         _rb.constraints = constraints;
@@ -188,6 +191,8 @@ public class PlayerController : MonoBehaviour
             
             score++;
             scoreText.text = score.ToString();
+            
+            AudioManager.Instance.PlaySoundEffect(AudioManager.SoundEffect.Score);
 
             if (score == 10)
             {
@@ -213,6 +218,8 @@ public class PlayerController : MonoBehaviour
             g.GetComponent<Rigidbody>().isKinematic = true;
             _gemStacked.Push(g);
             _gemInRange.Remove(g);
+            
+            AudioManager.Instance.PlaySoundEffect(AudioManager.SoundEffect.Pickup);
         }
     }
 

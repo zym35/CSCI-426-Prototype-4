@@ -44,11 +44,14 @@ public class GemSpawner : MonoBehaviour
     }
 
     IEnumerator SpawnEverySecond() {
-        while (GetNumberOfLiveGems() < numberOfGems)
+        while (true)
         {
-            SpawnGem();
+            if (GetNumberOfLiveGems() < numberOfGems)
+            {
+                SpawnGem();
+                
+            }
             yield return new WaitForSeconds(Random.Range(waitMin, waitMax));
         }
-        
     }
 }
