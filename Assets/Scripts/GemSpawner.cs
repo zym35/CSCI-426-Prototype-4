@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TorcheyeUtility;
 using UnityEngine;
 
 public class GemSpawner : MonoBehaviour
@@ -41,6 +42,8 @@ public class GemSpawner : MonoBehaviour
 
         // Instantiate the object at the random position
         Instantiate(objectToSpawn, randomPosition, Quaternion.identity);
+        
+        AudioManager.Instance.PlaySoundEffect(AudioManager.SoundEffect.GemSpawn);
     }
 
     IEnumerator SpawnEverySecond() {

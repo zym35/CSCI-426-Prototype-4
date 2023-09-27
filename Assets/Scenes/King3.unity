@@ -519,10 +519,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffectClips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: d90d1adcbfbea4d1281c973bd2a99be5, type: 3}
   - {fileID: 8300000, guid: cb8d1f9f8bcfd7744bc5c09e074bdeb6, type: 3}
   - {fileID: 8300000, guid: 15e9f634e944e104dab8ac20d84b5e12, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 910c601ee0dfa4bacacced88ebd7a04c, type: 3}
   - {fileID: 8300000, guid: 671f3a78e500145f9bbfb0f257a20e77, type: 3}
   musicClips:
   - {fileID: 8300000, guid: ef56ed756d6fb486c9feff924c8f5531, type: 3}

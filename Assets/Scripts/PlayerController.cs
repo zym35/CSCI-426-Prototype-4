@@ -106,6 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_chargeTimer >= blowTime)
         {
+            AudioManager.Instance.PlaySoundEffect(AudioManager.SoundEffect.Blow);
             var force = blowStartPower + _gemStacked.Count * gemBlowPowerup;
             
             foreach (var rb in blowTrigger.gemInRange)
